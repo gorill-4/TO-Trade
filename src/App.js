@@ -1,72 +1,55 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import './App.css';
 import axios from 'axios';
-import AssetDetail from './AssetDetail';
+import './App.css';
 
-function HomePage() {
+function App() {
   const [markets, setMarkets] = useState([]);
 
   useEffect(() => {
     const fetchMarkets = async () => {
       try {
-        const res = await axios.get('https://api.binance.com/api/v3/ticker/24hr');
-        const filtered = res.data
-          .filter(item => item.symbol.endsWith('USDT'))
-          .sort((a, b) => Math.abs(b.priceChangePercent) - Math.abs(a.priceChangePercent))
+        const response = await axios.get('https://api.binance.com/api/v3/ticker/24hr');
+        const sorted = response.data
+          .filter(asset => asset.symbol.endsWith('USDT'))
+          .sort((a, b) => parseFloat(b.priceChangePercent) - parseFloat(a.priceChangePercent))
           .slice(0, 10);
-        setMarkets(filtered);
-      } catch (err) {
-        console.error('Errore Binance API:', err);
+        setMarkets(sorted);
+      } catch (error) {
+        console.error('Errore nel caricamento dati Binance:', error);
       }
     };
 
     fetchMarkets();
-    const interval = setInterval(fetchMarkets, 10000);
+    const interval = setInterval(fetchMarkets, 10000); // aggiorna ogni 10s
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <main className="main-content">
-      <section className="column markets">
-        <h2>Markets</h2>
-        {markets.map(item => (
-          <Link
-            to={`/asset/${item.symbol}`}
-            key={item.symbol}
-            className="card link-card"
-          >
-            <div><strong>{item.symbol}</strong></div>
-            <div>${parseFloat(item.lastPrice).toFixed(4)}</div>
-            <div style={{ color: item.priceChangePercent >= 0 ? 'lightgreen' : 'red' }}>
-              {parseFloat(item.priceChangePercent).toFixed(2)}%
+    <div className="app">
+      <header className="header">
+        <h1>TO Trade</h1>
+      </header>
+      <div className="columns">
+        <div className="column markets">
+          <h2>Markets</h2>
+          {markets.map((item, index) => (
+            <div key={index} className="card">
+              <strong>{item.symbol}</strong>
+              <div>Price: ${parseFloat(item.lastPrice).toFixed(2)}</div>
+              <div
+                style={{ color: parseFloat(item.priceChangePercent) >= 0 ? 'lime' : 'red' }}
+              >
+                {parseFloat(item.priceChangePercent).toFixed(2)}%
+              </div>
             </div>
-          </Link>
-        ))}
-      </section>
-
-      <section className="column forecasts">
-        <h2>Forecasts</h2>
-        <div className="card">BTC/USDT - UP 70%</div>
-        <div className="card">ETH/USDT - DOWN 60%</div>
-      </section>
-    </main>
-  );
-}
-
-function App() {
-  return (
-    <Router>
-      <div className="app-container">
-        <header className="header">
-          <h1>TO Trade</h1>
-        </header>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/asset/:symbol" element={<AssetDetail />} />
-        </Routes>
+          ))}
+        </div>
+        <div className="column forecasts">
+          <h2>Forecasts</h2>
+          <p>Coming soon...</p>
+        </div>
       </div>
-    </Router>
+    </div>
   );
 }
 

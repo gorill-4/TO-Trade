@@ -1,31 +1,23 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(to bottom, #1b2735, #0f0f0f);
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(180deg, #101c2c, #0c111a);
   color: white;
 }
 
-.app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+.app {
+  padding: 20px;
 }
 
 .header {
-  padding: 20px;
-  background-color: #121212;
   text-align: center;
-  font-size: 26px;
-  color: #00bfff;
-  border-bottom: 1px solid #333;
+  margin-bottom: 30px;
 }
 
-.main-content {
+.columns {
   display: flex;
-  justify-content: center;
-  flex: 1;
-  padding: 40px;
   gap: 40px;
+  justify-content: center;
 }
 
 .column {
@@ -33,27 +25,15 @@ body {
   max-width: 400px;
 }
 
+.markets h2,
+.forecasts h2 {
+  margin-bottom: 10px;
+}
+
 .card {
-  background-color: #222;
-  margin-bottom: 20px;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0, 255, 255, 0.08);
-}
-.link-card {
-  text-decoration: none;
-  color: inherit;
-}
-
-.asset-detail {
-  padding: 40px;
-  text-align: center;
-}
-
-.back-button {
-  display: inline-block;
-  margin-bottom: 20px;
-  color: #00bfff;
-  text-decoration: none;
-  font-size: 16px;
+  background: #1b2a3a;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.1);
 }
